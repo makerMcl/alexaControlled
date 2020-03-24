@@ -21,6 +21,16 @@ An IoT-device for controlling multimedia devices via Web-UI or Alexa.
 * based on ESP32
 * interface circuitry ([printable version](docs/mmControl.pdf)): ![Circuit for mmControl](docs/mmControl.png)
 
+### Hints on implementation
+* use star layout (connect 5V input power only at one point)
+* I used a simple stripe-pcb from Radioshack for hosting the ESP32-board
+* TODO: check if a larger capacitor is possible (while keeping RC-behaviour)
+
+### Design considerations
+* output lines have resistor for short-circuit-proof
+* button input gets additional protection
+* drive relais shields from original 5V: 4times 80mA is a considerable amount, decouple power lines
+* IR-led driving circuitry used schottky-bypass for faster reactions, see [docs/ir_output_@*.jpg](docs/) to check effects
 
 ## Build Dependencies
 * add as git-submodule into `lib/`
