@@ -49,7 +49,7 @@ An IoT-device for controlling multimedia devices via Web-UI or Alexa.
 
 
 ## Licensing & Contact
-Licensed under LGPL v3.
+Licensed under GPL v3.
 
 Email: makerMcl (at) clauss.pro
 
@@ -58,6 +58,17 @@ Please only email me if it is more appropriate than creating an Issue / PR. I wi
 ## Copyright
 
 Copyright 2020 Matthias Clauﬂ
+
+## Helpful resources
+Some resources for a deeper understanding:
+
+* http://paulmurraycbr.github.io/ArduinoTheOOWay.html
+* http://www.ganssle.com/debouncing.pdf
+* http://www.elektronik-kompendium.de/public/schaerer/pullr.htm
+
+I am grateful for so many authors that helped learning CPP till I felt myself ok with my code. That is the reason I do publish this result of my hobby.
+
+Note: To avoid unmonitored commercial use of this work while giving back to the community, I choose the GPL licence.
 
 ## TODOs
 * fix IR receive logic (is there a timing issue on ESP32?)
