@@ -62,9 +62,10 @@ Copyright 2020 Matthias Clauﬂ
 ## Helpful resources
 Some resources for a deeper understanding:
 
-* http://paulmurraycbr.github.io/ArduinoTheOOWay.html
-* http://www.ganssle.com/debouncing.pdf
-* http://www.elektronik-kompendium.de/public/schaerer/pullr.htm
+* http://paulmurraycbr.github.io/ArduinoTheOOWay.html - implementing libs, useful patterns
+* http://www.ganssle.com/debouncing.pdf	- analytic of bounce of buttons
+* http://www.elektronik-kompendium.de/public/schaerer/pullr.htm - input protection circuit
+* https://www.elektronik-kompendium.de/sites/slt/0208031.htm - fast switching resistor
 
 I am grateful for so many authors that helped learning CPP till I felt myself ok with my code. That is the reason I do publish this result of my hobby.
 
