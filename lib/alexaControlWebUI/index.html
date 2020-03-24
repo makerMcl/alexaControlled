@@ -1,0 +1,62 @@
+<html>
+
+<head>
+    <style>
+        * {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .active {
+            background-color: green;
+        }
+        .off {
+            color: red;
+        }
+        .startup {
+            color: green;
+        }
+        .shutdown {
+            color:blue;
+        }
+        .button {
+            margin-bottom:10px;
+        }
+    </style>
+    <meta http-equiv="refresh" content="1">
+</head>
+
+<body style='height: 100%;'>
+    <div style='position: relative;min-height: 99%;'>
+        <div
+            style='background-color:lightgrey;position:absolute;width:98%;bottom:0;text-align:center;height:1em;margin-left:1%;'>
+            Build: __TIMESTAMP__</div>
+        <h1 style='position: absolute;top: 0;padding-left:10%;'>APPNAME</h1>
+        <div style='padding:5em 1% 2em 1%;'>
+            <p style='background-color:lightgrey;text-align:center;'>Status: %STATUS%</p>
+
+            <p style="padding-top:10%;">Kanal aktivieren:
+                <div style="text-align: center;">
+                <button onclick="location.href='/device/off?device=1';" class="button active">Device 1</button><br/>
+                <button onclick="location.href='/device/on?device=2';" class="button inactive">Device 2</button><br/>
+                <button onclick="location.href='/device/on?device=2';" class="button off">Device 3</button><br/>
+            </div>
+            </p>
+
+            <div style="margin-top:50px;background-color: rgb(230,230,230);padding:5px;border-top:solid 1px;">
+                TV-Kanal:
+                <button onclick="location.href='/channel/up';">Channel Up</button> &nbsp;
+                <button onclick="location.href='/channel/down';">Channel Down</button> &nbsp; &nbsp; 
+                <button onclick="location.href='';'" class="button active">Fernseher</button><br/>
+                <br />
+                <p style="margin-top:30px;">
+                    Aktiv:
+                    <a href="/device/set?device=1">Device 1</a>
+                    <a href="/device/set?device=2">Device 2</a>
+                    <a href="/device/set?device=3">Device 3</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
