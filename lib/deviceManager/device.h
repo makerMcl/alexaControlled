@@ -13,9 +13,9 @@ private:
     const char *_name;
     const CommandFunction _cmdOn = nullptr;
     const CommandFunction _cmdOff = nullptr;
-    word _waitForOnMs = 10000;     // time to wait till device can receive next command after got ON-command
-    word _waitForOffMs = 100000;   // time to wait till device can receive next command after got OFF-command
-    word _waitBeforeOffMs = 30000; // time to wait before switching device off - 30 sek
+    word _waitForOnMs = 10000;     // time in [ms] to wait till device can receive next command after got ON-command
+    word _waitForOffMs = 10000;    // time in [ms] to wait till device can receive next command after got OFF-command
+    word _waitBeforeOffMs = 30000; // time in [ms] to wait before switching device off - 30 sek
     /** OFF  [user]>  SWITCH_TO_ON  [ir-cmd]>  WAIT_FOR_ON  [time]>  ON
      *   [user]>  SWITCH_TO_OFF  [time]>  WAIT_TO_OFF  [ir-cmd]>  OFF
      */
@@ -45,28 +45,24 @@ private:
     {
         return ((millis() - _lastActionAtMs) >= _waitInterval);
     }
+    void processCommand(CommandQueue *queue, const CommandFunction cmd, const __FlashStringHelper *cmdName)
+    {
+        if (nullptr != cmd)
+        {
+            if (!queue->addCommand(cmd))
+            {
+                ui.logError() << F("dropped cmd: ") << _name << cmdName << endl;
+            }
+            else
+            {
+                ui.logTrace() << F("added cmd ") << _name << cmdName << endl;
+            }
+        }
+    }
 
 protected:
-    void commandOn(CommandQueue queue)
-    {
-        if (nullptr != _cmdOn)
-        {
-            if (!queue.addCommand(_cmdOn))
-            {
-                ui.logError() << "dropped cmd: " << _name << " ON";
-            }
-        }
-    }
-    void commandOff(CommandQueue queue)
-    {
-        if (nullptr != _cmdOff)
-        {
-            if (!queue.addCommand(_cmdOff))
-            {
-                ui.logError() << "dropped cmd: " << _name << " OFF";
-            }
-        }
-    }
+    virtual void commandOn(CommandQueue *queue) { processCommand(queue, _cmdOn, F(" ON")); }
+    virtual void commandOff(CommandQueue *queue) { processCommand(queue, _cmdOn, F(" OFF")); }
 
 public:
     /** alias device */
@@ -110,6 +106,10 @@ public:
     {
         return isPendingState(_state);
     }
+    void forceState(const bool isOn)
+    {
+        _state = isOn ? ON : OFF;
+    }
 
     String getStateName()
     {
@@ -138,11 +138,13 @@ public:
      * Define the new target state the device should switch to.
      * Immediatly accepts the target state, but switching to it is delayed.
      */
-    void setState(const bool targetStateIsOn, const CommandQueue queue);
+    void setState(const bool targetStateIsOn, CommandQueue *queue);
+    void setStateOn(CommandQueue *queue);
+    void setStateOff(CommandQueue *queue);
 
     /**
      * Performs device activation, blocking only for the duration of successive IR commands.
      * @return true if an activity was initiated
      */
-    bool handle(const CommandQueue queue);
+    bool handle(CommandQueue *queue);
 };

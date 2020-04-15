@@ -29,8 +29,14 @@ An IoT-device for controlling multimedia devices via Web-UI or Alexa.
 ### Design considerations
 * output lines have resistor for short-circuit-proof
 * button input gets additional protection
-* drive relais shields from original 5V: 4times 80mA is a considerable amount, decouple power lines
+* drive relais shields from original 5V: 4times 80mA is a considerable amount
+* provide the GND connectionof relais shield from the main power source point, to reach a star layout. 
+
+  Do not connect the GND ping of the relais shield to GND of your microcontroller board or PCB but instead 
+  to your main power connector. This should minimize effects from the coils to the microcontroller.
 * IR-led driving circuitry used schottky-bypass for faster reactions, see [docs/ir_output_@*.jpg](docs/) to check effects
+* Button must be on RTC-GPIO, candidates are: GPIO 2, 4, 13, 14, 15, 25, 26, 27, 32, 33, 34, 35, 36, 39
+* input only pins (no internal pull-up!) are GPIO34..39; do no use Pins with limited variance, these are: GPIO0, 1, 3, 6..12
 
 ## Build Dependencies
 * add as git-submodule into `lib/`
@@ -65,9 +71,10 @@ Some resources for a deeper understanding:
 * http://paulmurraycbr.github.io/ArduinoTheOOWay.html - implementing libs, useful patterns
 * http://www.ganssle.com/debouncing.pdf	- analytic of bounce of buttons
 * http://www.elektronik-kompendium.de/public/schaerer/pullr.htm - input protection circuit
+* https://electronicbase.net/de/tiefpass-berechnen/#rc-tiefpass-rechner - helps calculating alternative RC-combinations (and take care to respect the voltage divider R1:R2)
 * https://www.elektronik-kompendium.de/sites/slt/0208031.htm - fast switching resistor
 
-I am grateful for so many authors that helped learning CPP till I felt myself ok with my code. That is the reason I do publish this result of my hobby.
+I am grateful for so many authors that helped learning CPP till I felt myself ok with my code. That is one reason I do publish this result of my hobby.
 
 Note: To avoid unmonitored commercial use of this work while giving back to the community, I choose the GPL licence.
 
@@ -76,6 +83,7 @@ Note: To avoid unmonitored commercial use of this work while giving back to the 
 * implement unit tests
 * parameterizing device configuration (config via WebUI, save in flash?)
 * control secondary devices via bluetooth remote control
+* basic authentication for web-ui access
 
 later:
 * allow user interface via IR remote control (be aware to use IR codes not in use otherwise to avoid control interference)

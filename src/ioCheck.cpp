@@ -4,16 +4,15 @@
 #include "deviceCommandsMain.h"
 #include "deviceCommandsDevices.h"
 #include "universalUI.h"
+#include "mmControlWebUI.h"
 
-#define RELAIS_PORT 26
-#define PIN_BUTTON 4
 #define PIN_LED 13
-UniversalUI ui = UniversalUI("Alexa IO check");
-OneButton button = OneButton(PIN_BUTTON, 1, true);
+UniversalUI ui = UniversalUI("mmControl IO check");
+OneButton button = OneButton(PIN_BUTTON, true, true);
 
 void onClick()
 {
-    digitalWrite(PIN_LED, HIGH);
+    digitalWrite(PIN_LED_STATUS, HIGH);
     ui.statusActive("sending IR command");
     delay(DeviceTvMedion::av());
     ui.statusLedOff();
@@ -24,7 +23,7 @@ void onClick()
     DeviceTvMedion::ok();
     ui.logDebug("sent ok");
     ui.statusOk();
-    digitalWrite(PIN_LED, LOW);
+    digitalWrite(PIN_LED_STATUS, LOW);
 }
 
 void setup()
@@ -32,7 +31,7 @@ void setup()
     ui.init(2);
     Devices::init();
     button.attachClick(onClick);
-    pinMode(PIN_LED, OUTPUT);
+    pinMode(PIN_LED_STATUS, OUTPUT);
     ui.logDebug() << "Echt tolles"
                   << " debugging" << endl;
 }

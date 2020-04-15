@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include "IRremote.h"
-#include "alexaControlSettings.h"
+#include "mmControlSettings.h"
 #include "universalUIglobal.h"
 
 #ifndef DEVICE_COMMANDS_MAIN_H
@@ -9,50 +9,56 @@
 static IRsend irsend = IRsend(PIN_IR_TRANSMITTER);
 
 /** send RC5 code with 12 bits */
-static word irRc5(int code, String cmd)
+static int irRc5(int code, const __FlashStringHelper *cmd)
 {
+    ui.logTrace() << F("sending RC5-IR command: ") << cmd << endl;
+    const word start = micros();
     irsend.sendRC5(code, 12);
-    ui.logTrace() << "sent RC5-IR command: " << cmd << endl;
+    // time check: allow 1 mark tolerance = (4+12*2)*889µsec = 24892
+    if ((micros() - start) > 25000)
+    {
+        ui.logError() << F("ir-send failed: ") << cmd << endl;
+        return -1;
+    }
     return 114;
 }
 /** send RC6 code with 20 bits */
-static word irRc6(int code, String cmd)
+static int irRc6(int code, const byte bits, const __FlashStringHelper *cmd)
 {
-    irsend.sendRC6(code, 20);
-    ui.logTrace() << "sent RC6-IR command: " << cmd << endl;
+    irsend.sendRC6(code, bits);
+    ui.logTrace() << F("sending RC6-IR command: ") << cmd << endl;
     return 20;
 }
 
 namespace DeviceTvMedion
 {
-static word onOff()
+static int onOff()
 {
-    return irRc5(0x4C, "on/off");
+    return irRc5(0x4C, F("MedionTV on/off"));
 }
-static word up()
+static int up()
 {
-    return irRc5(0x54, "up");
+    return irRc5(0x54, F("up"));
 }
-static word down()
+static int down()
 {
-    return irRc5(0x53, "down");
+    return irRc5(0x53, F("down"));
 }
-static word av()
+static int av()
 {
-    return irRc5(0x78, "av");
+    return irRc5(0x78, F("av"));
 }
-static word ok()
+static int ok()
 {
-    return irRc5(0x75, "ok");
+    return irRc5(0x75, F("ok"));
 }
 } // namespace DeviceTvMedion
 
 namespace DeviceSoundbarPhilips
 {
-static word onOff()
-{
-    return irRc6(0x100C, "onOff");
-}
+static int onOff() { return irRc6(0x100C, 12, F("Soundbar on/off")); }
+static int volumeUp() { return irRc6(0x1010, 13, F("Soundbar Volume+")); }
+static int volumeDown() { return irRc6(0x8808, 13, F("Soundbar Volume-")); }
 }; // namespace DeviceSoundbarPhilips
 
 #endif
